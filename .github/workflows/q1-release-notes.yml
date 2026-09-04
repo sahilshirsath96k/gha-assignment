@@ -1,7 +1,7 @@
 name: CI
 
 on:
-  workflow_dispatch:
+  workflow_dispatch: 
     inputs:
       version:
         type: string
@@ -10,17 +10,24 @@ on:
 
       release_type:
         type: choice
-        options:
-          - major
-          - minor
-          - patch
-        default: patch
-        required: true
+        options: [ patch, minor, major ]
+        default: "patch"
+
 
 jobs:
   prepare:
     runs-on: ubuntu-latest
     steps:
-        - uses: actions/checkout@v4
-        - run: echo "build_tag=${{inputs.version}}"
-          
+      - uses: actions/checkout@v4
+      - run: echo "{{ inputs.version }}"
+      - run: echo "{{ inputs.release_type }}"
+      - run: echo "{{ inputs.run_number }}"
+      - run: echo "build_date=$(date +%F)" >> "$GITHUB_OUTPUT"
+
+  announce:
+    needs: prepare
+    runs-on: ubuntu-latest
+    steps:
+      - name: output
+        run: |
+          echo "build_date:${{ needs.prepare.outputs.build_date }}"
