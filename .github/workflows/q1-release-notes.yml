@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        type: string
+        default: "1.0.0"
+        required: true
+
+      release_type:
+        type: choice
+        options:
+          - major
+          - minor
+          - patch
+        default: patch
+        required: true
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    steps:
+        - uses: actions/checkout@v4
+        - run: echo "build_tag=${{inputs.version}}"
+          
