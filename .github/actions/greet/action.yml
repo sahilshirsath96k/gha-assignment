@@ -1,1 +1,35 @@
+name: Env_Action
+description: Creates a greeting message for a given environment
 
+inputs:
+  name:
+    description: Name of the person
+    required: true
+
+  env_name:
+    description: Environment name
+    required: false
+    default: dev
+
+outputs:
+  greeting:
+    description: Generated greeting message
+    value: ${{ steps.create-greeting.outputs.greeting }}
+
+runs:
+  using: composite
+
+  steps:
+    - name: Print input information
+      shell: bash
+      run: |
+        echo "Name: ${{ inputs.name }}"
+        echo "Environment: ${{ inputs.env_name }}"
+
+    - name: Create greeting
+      id: create-greeting
+      shell: bash
+      run: |
+        greeting="Hello ${{ inputs.name }}, welcome to ${{ inputs.env_name }}."
+        echo "Greeting: $greeting"
+        echo "greeting=$greeting" >> "$GITHUB_OUTPUT"
