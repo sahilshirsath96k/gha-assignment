@@ -19,9 +19,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: echo "{{ inputs.version }}"
-      - run: echo "{{ inputs.release_type }}"
-      - run: echo "{{ github.run_number }}"
+      - run: echo "${{ inputs.version }}"
+      - run: echo "${{ inputs.release_type }}"
+      - run: echo "${{ github.run_number }}"
       - run: echo "build_date=$(date +%F)" >> "$GITHUB_OUTPUT"
 
   announce:
@@ -30,4 +30,4 @@ jobs:
     steps:
       - name: output
         run: |
-          echo "build_date:${{ needs.prepare.outputs.build_date }}"
+          echo "${{ needs.prepare.outputs.build_date }}"
