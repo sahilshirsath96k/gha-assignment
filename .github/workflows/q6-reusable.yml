@@ -1,0 +1,29 @@
+name: Q6 Reusable Workflow
+
+on:
+  workflow_call:
+    inputs:
+      target_env:
+        description: Target environment
+        required: true
+        type: string
+
+jobs:
+  greet-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run greeting action
+        id: greet
+        uses: ./.github/actions/greet
+        with:
+          name: Sahil
+          env_name: ${{ inputs.target_env }}
+
+      - name: Print greeting
+        run: |
+          echo "${{ steps.greet.outputs.greeting }}"
+          echo "Deploying to ${{ inputs.target_env }}... done."
