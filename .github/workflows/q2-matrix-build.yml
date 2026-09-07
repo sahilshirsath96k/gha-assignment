@@ -46,8 +46,8 @@ jobs:
           mkdir -p out
 
           echo "OS: $RUNNER_OS" > out/report-${{ matrix.os }}-${{ matrix.node }}.txt
-          echo "Node version: $(node --version)" >> out/report-${{ matrix.os }}-${{ matrix.node }}.txt
-          echo "npm version: $(npm --version)" >> out/report-${{ matrix.os }}-${{ matrix.node }}.txt
+          echo "Node version: $(node -v)" >> out/report-${{ matrix.os }}-${{ matrix.node }}.txt
+          echo "npm version: $(npm -v)" >> out/report-${{ matrix.os }}-${{ matrix.node }}.txt
           echo "Run number: $GITHUB_RUN_NUMBER" >> out/report-${{ matrix.os }}-${{ matrix.node }}.txt
 
       - name: Upload report
