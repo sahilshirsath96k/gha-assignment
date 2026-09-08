@@ -1,87 +1,58 @@
-name: matrix_build
-
+name: Q2 Release Notes
 on:
   push:
+    branches: [main]
+
   workflow_dispatch:
 
 jobs:
-
   build:
     runs-on: ${{ matrix.os }}
-
+    timeout-minutes: 10
     strategy:
       fail-fast: false
-
       matrix:
-        os:
-          - ubuntu-latest
-          - ubuntu-22.04
-
-        node:
-          - 18
-          - 20
-
+        os: [ubuntu-latest, ubuntu-22.04]
+        node: [18, 20]
         exclude:
           - os: ubuntu-22.04
             node: 18
-
-    timeout-minutes: 10
-
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: Node Setup
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
 
-      - name: Print Node and npm versions
+      - name: Print Versions
         run: |
-          node -v
-          npm -v
+          npm --version
+          node --version
 
-      - name: Create report
+      - name: Write Report
         run: |
           mkdir -p out
-            echo "OS: ${{ matrix.os }}, Node: ${{ matrix.node }}, Run: ${{ github.run_number }}"
-            > "out/report-${{ matrix.os }}-${{ matrix.node }}.txt"
-          # echo "OS: $RUNNER_OS" > out/report-${{ matrix.os }}-${{ matrix.node }}.txt
-          # echo "Node version: $(node -v)" >> out/report-${{ matrix.os }}-${{ matrix.node }}.txt
-          # echo "npm version: $(npm -v)" >> out/report-${{ matrix.os }}-${{ matrix.node }}.txt
-          # echo "Run number: $GITHUB_RUN_NUMBER" >> out/report-${{ matrix.os }}-${{ matrix.node }}.txt
-          
+          echo "Runner OS: $RUNNER_OS">out/report-${{ matrix.os }}-${{ matrix.node }}.txt
+          echo "Node Version: ${{ matrix.node }}">>out/report${{ matrix.os }}-${{ matrix.node }}.txt
+          echo "RUN Number: ${{ github.run_number }}">>out/report${{ matrix.os }}-${{ matrix.node }}.txt
 
-      - name: Upload report
+      - name: Upload File
         uses: actions/upload-artifact@v4
         with:
           name: report-${{ matrix.os }}-${{ matrix.node }}
           path: out/report-${{ matrix.os }}-${{ matrix.node }}.txt
 
-
+        
   collect:
     needs: build
-    if: ${{ always() }}
+    if: always()
     runs-on: ubuntu-latest
-
     steps:
-      - name: Download all artifacts
-        uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v4
         with:
           path: all-reports
-
-      - name: Print all reports
-        run: |
-          echo "Downloaded artifacts:"
-          find all-reports -type f -print
-
-          echo ""
-          echo "Contents of every report:"
-
-          for file in $(find all-reports -type f); do
-            echo "========================================"
-            echo "FILE: $file"
-            echo "========================================"
-            cat "$file"
-            echo ""
-          done
+      - name: 
+        run: find all-reports -type f -exec cat {} \;
+        
