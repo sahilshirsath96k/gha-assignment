@@ -12,9 +12,11 @@ jobs:
 
     steps:
       - name: Make version
-        run: echo ":: set-output name=version=1.0.$GITHUB_RUN_NUMBER"
+        id: make
+        run: echo "version=1.0.$GITHUB_RUN_NUMBER" >> "$GITHUB_OUTPUT"
 
   consume:
+    needs: generate
     runs-on: ubuntu-latest
 
     steps:
