@@ -22,8 +22,6 @@ https://github.com/sahilshirsath96k/gha-assignment/actions/runs/34223242261/job/
 
 ### Bug Table
 
-### Bug Table
-
 | Bug | Cause | Fix |
 |---|---|---|
 | Composite action output is not available | The output was not connected to the correct step output | Set `id: create-greeting` on the greeting step and use `${{ steps.create-greeting.outputs.greeting }}` |
@@ -36,8 +34,6 @@ https://github.com/sahilshirsath96k/gha-assignment/actions/runs/34223242261/job/
 ### Successful Workflow Run
 
 https://github.com/sahilshirsath96k/gha-assignment/actions/runs/34367655124/job/102520441682
-
-### Bug Table
 
 ### Bug Table
 
@@ -55,8 +51,6 @@ https://github.com/sahilshirsath96k/gha-assignment/actions/runs/34367655124/job/
 ### Successful Workflow Run
 
 https://github.com/sahilshirsath96k/gha-assignment/actions/runs/34243110711/job/102118118869
-
-### Bug Table
 
 ### Bug Table
 
