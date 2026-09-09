@@ -24,9 +24,10 @@ https://github.com/sahilshirsath96k/gha-assignment/actions/runs/34223242261/job/
 
 | Bug | Cause | Fix |
 |---|---|---|
-| Greeting output was not coming | Output was not connected with the correct step | Added step id and mapped the output correctly |
-| Greeting value was empty | Output was not written to GitHub output | Used `$GITHUB_OUTPUT` to save the greeting |
-| Greeting output was not accessible | `id` was given to the wrong step | Moved `id: greet` to the greeting action step |
+| Workflow trigger is not written correctly | `push` and `workflow_dispatch` are not properly structured under `on` | Correct the `on` section with proper YAML indentation |
+| Runner is not available | `ubuntu-latest-large` is not available in the current setup | Use `ubuntu-latest` |
+| Hello script may fail | Repository is not checked out before running the script | Move `actions/checkout` before the script step |
+| Checkout action is incomplete | `actions/checkout` is used without a version | Use `actions/checkout@v4` |
 
 
 ## Q4
@@ -39,11 +40,11 @@ https://github.com/sahilshirsath96k/gha-assignment/actions/runs/34367655124/job/
 
 | Bug | Cause | Fix |
 |---|---|---|
-| Job was skipped for staging | Condition was added at job level for production only | Removed the job level condition |
-| Environment allowed free text | Input type was not defined | Added choice input with staging and production |
-| Production message was not working correctly | Condition was applied to the complete job | Added condition only to the production step |
-| Guarded step was not working properly | Condition was not written correctly | Corrected the condition using `env.APP_NAME` |
-| Notify step was not running | `success()` and `failure()` cannot be true together | Changed the condition to `always()` |
+| Production condition is not working | `production` is written without quotes | Use `'production'` |
+| Job is skipped for staging | Condition is applied to the whole job | Remove the job-level condition so the job runs for both environments |
+| Environment allows free text | Input type is not specified | Add `type: choice` with `staging` and `production` options |
+| Guarded step condition is not working | `env` variable is not referenced correctly | Use `${{ env.APP_NAME == 'demo-app' }}` |
+| Notify step never runs | `success()` and `failure()` cannot be true together | Use `if: ${{ always() }}` |
 
 
 ## Q5
@@ -56,7 +57,7 @@ https://github.com/sahilshirsath96k/gha-assignment/actions/runs/34243110711/job/
 
 | Bug | Cause | Fix |
 |---|---|---|
-| Version was not available in consume job | Dependency on generate job was missing | Added `needs: generate` |
-| Version output was empty | Make step did not have an id | Added `id: make` |
-| `set-output` was not working | The command is deprecated | Used `$GITHUB_OUTPUT` instead |
-| Workflow had indentation issues | YAML structure was not properly aligned | Corrected the YAML indentation |
+| Version output is not created | `id: make` is missing from the Make version step | Add `id: make` |
+| `set-output` is deprecated | Old output syntax is being used | Use `$GITHUB_OUTPUT` |
+| Consume job cannot get the version | `needs: generate` is missing | Add `needs: generate` |
+| Version check cannot get the output | The generate job output depends on the missing step id | Add `id: make` and write the version to `$GITHUB_OUTPUT` |
