@@ -1,0 +1,49 @@
+pipeline {
+    agent any
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Build') {
+            steps {
+                sh 'echo Building the application'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                sh 'echo Running build'
+            }
+        }
+
+        stage('Deploy') {
+            when {
+                branch 'main'
+            }
+            steps {
+                sh 'echo Deploying the application'
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Archiving test reports...'
+            archiveArtifacts artifacts: 'test-reports/**', allowEmptyArchive: true
+        }
+
+        success {
+            sh 'echo successfully run'
+        }
+
+        failure {
+            sh 'echo Pipeline failed'
+        }
+    }
+}
+

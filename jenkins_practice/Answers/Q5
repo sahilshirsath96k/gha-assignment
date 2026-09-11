@@ -1,0 +1,52 @@
+Symptom 1
+
+ERROR: workspace .../nightly-build is already locked
+
+Root cause: Two builds of the same job are running concurrently (overlapping executions, a
+previous run still finishing, or a manual + scheduled trigger colliding), and Jenkins serializes access
+to a workspace shared by job name.
+
+Fix: If concurrency wasn't intended, check "Do not allow concurrent builds" in the job's General
+settings to serialize execution cleanly. If concurrency is intended, instead configure a custom
+
+workspace naming strategy (e.g.
+${JOB_NAME}-${EXECUTOR_NUMBER}
+) 
+so each concurrent executor gets its own isolated workspace rather than sharing one directory.
+
+
+Symptom 2
+
+Permission denied: cannot write to /var/jenkins_home/workspace/nightly-build/
+build.log
+
+Root cause: The build is intermittently picked up by a different agent/executor running under a
+different OS user context (or a prior build left files owned by root/another UID after a
+
+sudo
+step), so the
+jenkins
+user lacks write permission on files left behind.
+
+Fix: Pin the job to a single specific agent/label ("Restrict where this project can run" → fixed node
+label) so it always runs under the same user context, and add a "Delete workspace before build
+starts" (Wipe Workspace) build step so no stale, wrongly-owned files remain.
+
+
+Symptom 3
+
+Occasionally the build uses a stale copy of the repo, missing the latest
+commit.
+
+Root cause: The Git checkout is reusing a cached local
+.git
+state without cleaning, so under load a build occasionally starts before the fetch/poll has picked up
+the newest ref.
+
+Fix: In the Git SCM configuration, add the "Clean before checkout" and "Clean after checkout"
+Additional Behaviours to wipe stale refs, confirm the refspec is the full
+
++refs/heads/*:refs/remotes/origin/*
+
+(not a narrow/cached ref), and disable "Force polling using workspace" so SCM polling always
+queries the remote directly instead of trusting a potentially stale local state.

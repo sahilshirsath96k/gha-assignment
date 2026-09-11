@@ -1,0 +1,7 @@
+{
+  "scripts": {
+    "build": "echo Building application",
+    "test": "echo Running tests",
+    "lint": "echo Running lint"
+  }
+}

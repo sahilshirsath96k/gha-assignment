@@ -1,0 +1,51 @@
+Corrected code: 
+
+pipeline {
+    agent any
+
+    environment {
+        APP_ENV = 'staging'
+    }
+
+    stages {
+
+        stage('Build') {
+            steps {
+                retry(3) {
+                    sh 'make build'
+                }
+            }
+        }
+
+        stage('Test') {
+            steps {
+                script {
+                    try {
+                        sh 'make test'
+                    } catch (err) {
+                        currentBuild.result = 'UNSTABLE'
+                    }
+                }
+            }
+        }
+    }
+}
+
+Changes made to convert scripted piprline into declarative pipeline
+
+
+node { ... } is Scripted Pipeline syntax.
+Change: Use pipeline { agent any ... } in Declarative Pipeline.
+
+env.APP_ENV = 'staging' is Scripted-style environment assignment.
+Change: Use environment { APP_ENV = 'staging' }.
+
+stage('Build') is inside the node block.
+Change: Put stages inside the required stages { ... } block.
+
+retry(3) is directly inside the Scripted stage.
+Change: Put retry(3) inside the Declarative steps { ... } block.
+
+try/catch is Groovy logic.
+Change: Use script { ... } because Declarative does not allow arbitrary Groovy directly inside steps.
+

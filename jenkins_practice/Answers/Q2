@@ -1,0 +1,46 @@
+Code output:
+
+> git config core.sparsecheckout # timeout=10
+ > git checkout -f 1dad67604cef802568aea96d981b2ffe1f2cf830 # timeout=10
+Commit message: "Replace echo commands with sh commands in Jenkinsfile"
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Build)
+[Pipeline] sh
++ echo Building the application
+Building the application
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Test)
+[Pipeline] sh
++ echo Running build
+Running build
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Deploy)
+Stage "Deploy" skipped due to when conditional
+[Pipeline] getContext
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Declarative: Post Actions)
+[Pipeline] echo
+Archiving test reports...
+[Pipeline] archiveArtifacts
+Archiving artifacts
+‘test-reports/**’ doesn’t match anything, but ‘**’ does. Perhaps that’s what you mean?
+No artifacts found that match the file pattern "test-reports/**". Configuration error?
+[Pipeline] sh
++ echo successfully run
+successfully run
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+Finished: SUCCESS

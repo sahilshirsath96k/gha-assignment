@@ -1,0 +1,157 @@
+corrected code :
+
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main',
+                    url: 'https://github.com/sahilshirsath96k/jenkins_pract.git'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                sh 'npm install'
+                sh 'npm run build'
+            }
+        }
+
+        stage('Parallel Tests') {
+            parallel {
+                stage('Unit Tests') {
+                    steps {
+                        sh 'npm test'
+                    }
+                }
+
+                stage('Lint') {
+                    steps {
+                        sh 'npm run lint'
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            sh 'rm -rf workspace/*'
+        }
+    }
+}
+
+Output:
+
+ > git checkout -f e4efa5227260626b7031e4a8a7db88636ba1393f # timeout=10
+Commit message: "Update Git repository URL in Jenkinsfile"
+ > git rev-list --no-walk fcaec270c5ada99e14835e742afb8014d99bddb6 # timeout=10
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Checkout)
+[Pipeline] git
+Selected Git installation does not exist. Using Default
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse --resolve-git-dir /var/lib/jenkins/workspace/jenkins_pract/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/sahilshirsath96k/jenkins_pract.git # timeout=10
+Fetching upstream changes from https://github.com/sahilshirsath96k/jenkins_pract.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.53.0'
+ > git fetch --tags --force --progress -- https://github.com/sahilshirsath96k/jenkins_pract.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+Checking out Revision e4efa5227260626b7031e4a8a7db88636ba1393f (refs/remotes/origin/main)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f e4efa5227260626b7031e4a8a7db88636ba1393f # timeout=10
+ > git branch -a -v --no-abbrev # timeout=10
+ > git branch -D main # timeout=10
+ > git checkout -b main e4efa5227260626b7031e4a8a7db88636ba1393f # timeout=10
+Commit message: "Update Git repository URL in Jenkinsfile"
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Build)
+[Pipeline] sh
++ npm install
+
+up to date, audited 1 package in 90ms
+
+found 0 vulnerabilities
+[Pipeline] sh
++ npm run build
+
+> build
+> echo Building application
+
+Building application
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Parallel Tests)
+[Pipeline] parallel
+[Pipeline] { (Branch: Unit Tests)
+[Pipeline] { (Branch: Lint)
+[Pipeline] stage
+[Pipeline] { (Unit Tests)
+[Pipeline] stage
+[Pipeline] { (Lint)
+[Pipeline] sh
+[Pipeline] sh
++ npm test
++ npm run lint
+
+> test
+> echo Running tests
+
+Running tests
+
+> lint
+> echo Running lint
+
+Running lint
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // parallel
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Declarative: Post Actions)
+[Pipeline] sh
++ rm -rf workspace/*
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+Finished: SUCCESS
+
+Bugs and Fixes
+
+1. Bug: stage('Checkout') is outside the stages block.
+Fix: Put Checkout inside stages { ... }.
+
+2. Bug: stages { is placed after the Checkout stage.
+Fix: Move stages { before the first stage.
+
+3. Bug: stage('Unit Tests') is missing the opening { after the stage name.
+Fix: Write stage('Unit Tests') { steps { ... } }.
+
+4. Bug: The Unit Tests stage is not properly structured inside the parallel block.
+Fix: Make Unit Tests a complete stage with its own { steps { ... } }.
+
+5. Bug: The closing braces for parallel, stage('Parallel Tests'), and stages are incorrectly arranged.
+Fix: Close each block in the correct nested order.
+
+6. Bug: The final closing brace for the pipeline block is missing.
+Fix: Add } at the end to properly close pipeline { ... }.
