@@ -1,0 +1,24 @@
+Q1. Which command displays the current working directory?
+A) pwd
+
+Q2. What permission does 'chmod 755 file.sh' set?
+A) rwxr-xr-x
+
+Q3. Write the command to list all files, including hidden ones, in long listing format.
+Command: ls -la
+
+Q4. Which symbol represents the current user's home directory?
+B) ~
+
+Q5. The command 'chown user:group file' changes what?
+B) File owner and group
+
+Q6. Write a command to create a directory named 'project' without an error if it already exists
+Command: mkdir -p project
+
+Q7. What does '.' refer to when used as in 'cd .'?
+A) Parent directory
+
+Q8. Which command changes ownership of a directory and everything inside it, recursively?
+B) chown -R
+
