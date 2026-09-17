@@ -1,0 +1,6 @@
+Q1 — Branch Found, Pipeline Not Running
+
+1. Error — What is wrong?
+Jenkins cannot find the Jenkinsfile at the expected path.
+
+2. Root cause
