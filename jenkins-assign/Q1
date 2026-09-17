@@ -1,0 +1,38 @@
+Q1 — Branch Found, Pipeline Not Running
+
+1. Error — What is wrong?
+
+Jenkins cannot find the Jenkinsfile at the expected path.
+
+2. Root cause
+
+The dev branch does not contain a Jenkinsfile at the path configured in the Multibranch Pipeline.
+
+3. Fix
+
+ add Jenkinsfile to the dev branch
+pipeline {
+    agent any
+
+    stages {
+        stage('Build') {
+            steps {
+                echo 'Building'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo 'Running tests'
+            }
+        }
+    }
+}
+
+4. Verify
+
+Run Scan Multibranch Pipeline Now
+it shows jenkins file not found 
+fixing it by adding the jenkins file to dev branch
+
+
