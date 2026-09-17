@@ -1,0 +1,41 @@
+1. Error — What is wrong?
+
+branchName is not a valid Declarative Pipeline when condition.
+branchName 'main'
+
+2. Root cause — Why is it happening?
+
+Jenkinsfile contains incorrect syntax for the branch
+In a Multibranch Pipeline, branch-specific stages should use the branch condition.
+
+3. Fix — What exact change would you make?
+
+when {
+    branchName 'main'
+}
+
+fix:
+when {
+    branch 'main'
+}
+
+code:
+pipeline {
+  agent any
+  stages {
+    stage('Test') {
+      when {
+        branch 'main'
+      }
+      steps {
+        sh 'echo Running tests'
+      }
+    }
+  }
+}
+
+4. Verify
+
+- Run the dev branch again.
+- Confirm the Invalid condition "branchName" error is gone.
+- Run the main branch and verify that the Test stage runs because the branch is main.
